@@ -8,8 +8,8 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = {"test/features/"},
-        glue = {"test/steps/MyStepdefs"}
+        features = "classpath:features",
+        glue = {"steps"}
 )
 public class TestRunner {
 }
