@@ -1,19 +1,67 @@
-plugins {
-    id 'java'
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.qameta.allure:allure-gradle:2.5'
+    }
 }
+
+apply plugin:'java'
+apply plugin:'base'
+apply plugin:'idea'
+apply plugin: 'io.qameta.allure'
 
 group 'TestCucumber'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
+configurations {
+    agent
+}
+
 dependencies {
+    agent "org.aspectj:aspectjweaver:1.8.10"
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile 'io.cucumber:cucumber-java:4.0.0'
-    testCompile 'io.cucumber:cucumber-junit:4.0.0'
+    testCompile 'io.cucumber:cucumber-java8:4.0.1'
+    testCompile 'io.cucumber:cucumber-junit:4.0.1'
     testCompile 'com.codeborne:selenide:4.14.2'
+    compile ('io.qameta.allure:allure-cucumber3-jvm:2.7.0')
+    compile('io.qameta.allure:allure-gradle:2.5')
+}
+
+/*test.doFirst {
+    jvmArgs "-javaagent:${configurations.agent.singleFile}"
+}*/
+
+
+allure {
+    version = '2.7.0'
+    autoconfigure = true
+    aspectjweaver = true
+    aspectjVersion = '1.8.10'
+
+    resultsDir = file("${projectDir}/allure-results")
+    reportDir = file("${projectDir}/allure-report")
+    
+    useCucumberJVM {
+        version = '2.7.0'
+    }
+
+    //resultsDir = file("${projectDir}/allure-results")
+    //reportDir = file("${projectDir}/allure-report")
+
+    downloadLink = 'https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/2.7.0/allure-2.7.0.zip'
+}
+
+wrapper {
+    gradleVersion = '4.8'
 }
